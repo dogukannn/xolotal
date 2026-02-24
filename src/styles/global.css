@@ -39,7 +39,7 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
 .sigil .inner { fill: rgba(216,178,106,.06); }
 .sigil .worm { fill: var(--accent); stroke: none; }
 
-.layout { max-width: 72rem; margin: 2rem auto; padding: 0 1.25rem; display: grid; grid-template-columns: repeat(auto-fit,minmax(18rem,1fr)); gap: 1rem; }
+.layout { max-width: 72rem; margin: 1rem auto 2rem; padding: 0 1.25rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
 .card {
   background: linear-gradient(180deg, rgba(21,25,34,.95), rgba(15,17,24,.96));
   border: 1px solid var(--line);
@@ -107,14 +107,18 @@ th,td { border-bottom: 1px solid var(--line); padding: .55rem; text-align: left;
 .pill { display: inline-block; border-radius: 999px; padding: .1rem .55rem; font-size: .8rem; color: var(--accent); background: rgba(216,178,106,.18); }
 .pill--alert { color: #ffdede; background: rgba(230,141,141,.25); }
 
-.daily-saying { max-width: 72rem; margin: 0 auto 1.6rem; padding: 0 1.25rem; }
+.daily-saying { max-width: 72rem; margin: 1.1rem auto 0; padding: 0 1.25rem; }
 .daily-saying blockquote {
   margin: 0;
   border-left: 4px solid var(--accent);
   border-radius: .6rem;
   padding: 1rem 1rem 1rem 1.2rem;
   font-style: italic;
-  background: rgba(19, 23, 31, 0.9);
+  background: rgba(8, 9, 13, .32);
 }
 
-@media (max-width: 850px) { .card--wide { grid-column: span 1; } }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .card--wide { grid-column: span 1; }
+  .hero__title-row { flex-wrap: wrap; }
+}

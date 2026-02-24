@@ -76,6 +76,12 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
     </div>
   </header>
 
+  <aside class="daily-saying">
+    <h2>Litany of the Day</h2>
+    <blockquote id="daily-quote"></blockquote>
+    <p class="quote-meta">A quote shifts with the imperial cycle each UTC day.</p>
+  </aside>
+
   <main class="layout">
     <section class="card card--wide senate-section">
       <h2>Kontor (100 Seats)</h2>
@@ -155,11 +161,6 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
     </section>
   </main>
 
-  <aside class="daily-saying">
-    <h2>Litany of the Day</h2>
-    <blockquote id="daily-quote"></blockquote>
-    <p class="quote-meta">A quote shifts with the imperial cycle each UTC day.</p>
-  </aside>
 
   <script define:vars={{ sayings, voteActions, firebaseBaseUrl }}>
     const today = new Date();
