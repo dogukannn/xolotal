@@ -68,3 +68,30 @@ Most page sections now read from JSON files under `src/data` so you can edit cam
 - Power standings: `src/data/power-standings.json` → `pwsh ./scripts/add-standing.ps1`
 - Current ruler section: `src/data/ruler.json` → `pwsh ./scripts/update-ruler.ps1`
 - Experimental notable character portraits: `src/data/notable-characters.json` → `pwsh ./scripts/add-notable-character.ps1`
+
+### Sync notable portraits into the repository
+
+If you want portrait images committed into the repo and resized from JSON-defined dimensions:
+
+1. Add an `image` block per character in `src/data/notable-characters.json`:
+
+```json
+{
+  "name": "Example",
+  "portraitUrl": "https://...",
+  "image": {
+    "sourceUrl": "https://...",
+    "width": 480,
+    "height": 480
+  }
+}
+```
+
+2. Run:
+
+```bash
+npm run sync:portraits
+```
+
+This command downloads each `image.sourceUrl`, rescales it to the JSON resolution, saves it under `public/images/notable-characters`, and rewrites `portraitUrl` to the local repo path.
+

@@ -9,6 +9,15 @@ function Read-RequiredText {
   }
 }
 
+function Read-PositiveInt {
+  param([string]$Prompt)
+  while ($true) {
+    $value = Read-Host $Prompt
+    if ([int]::TryParse($value, [ref]$parsed) -and $parsed -gt 0) { return $parsed }
+    Write-Host "Please enter a positive number." -ForegroundColor Yellow
+  }
+}
+
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $dataPath = Join-Path $repoRoot "src/data/notable-characters.json"
 if (!(Test-Path $dataPath)) { throw "notable-characters.json not found at $dataPath" }
@@ -16,17 +25,24 @@ if (!(Test-Path $dataPath)) { throw "notable-characters.json not found at $dataP
 $entries = @((Get-Content $dataPath -Raw | ConvertFrom-Json))
 $name = Read-RequiredText "Character name"
 $title = Read-RequiredText "Character title"
-$portraitUrl = Read-RequiredText "Portrait URL"
 $portraitAlt = Read-RequiredText "Portrait alt text"
 $notes = Read-Host "Notes (optional)"
+$sourceUrl = Read-RequiredText "Source image URL"
+$width = Read-PositiveInt "Target width"
+$height = Read-PositiveInt "Target height"
 
 $entries += [PSCustomObject]@{
   name = $name
   title = $title
-  portraitUrl = $portraitUrl
+  portraitUrl = $sourceUrl
   portraitAlt = $portraitAlt
   notes = if ([string]::IsNullOrWhiteSpace($notes)) { "" } else { $notes.Trim() }
+  image = [PSCustomObject]@{
+    sourceUrl = $sourceUrl
+    width = $width
+    height = $height
+  }
 }
 
-$entries | ConvertTo-Json -Depth 6 | Set-Content $dataPath -Encoding utf8
-Write-Host "Notable character added." -ForegroundColor Green
+$entries | ConvertTo-Json -Depth 8 | Set-Content $dataPath -Encoding utf8
+Write-Host "Notable character added. Run npm run sync:portraits to generate local resized images." -ForegroundColor Green
