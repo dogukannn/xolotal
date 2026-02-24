@@ -32,3 +32,24 @@ This repo includes `.github/workflows/deploy.yml`, which automatically builds an
 3. Push to `main` and the workflow will publish `dist/`.
 
 > Note: votes are now loaded/saved directly from Firebase in the browser, which keeps the site compatible with static hosting on GitHub Pages.
+
+
+## Add a new session entry (PowerShell)
+
+Run the script and answer the interactive prompts:
+
+```powershell
+pwsh ./scripts/add-session.ps1
+```
+
+The script asks for:
+- session title
+- date
+- threat points
+- momentum
+- determination points
+- spotlight items (multiple, one per line)
+- optional notes
+
+The page renders entries from `src/data/sessions.json` in the **Session Arsivi** section.
+

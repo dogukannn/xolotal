@@ -1,0 +1,15 @@
+[
+  {
+    "id": "session-001",
+    "title": "Ilk Trisk Seansi",
+    "date": "10201-01-09",
+    "threatPoints": 3,
+    "momentum": 2,
+    "determinationPoints": 1,
+    "spotlights": [
+      "Senato acil oylamasi ile House Minor yetkisi uzatildi.",
+      "Anerkil ajanlari kara pazar sevkiyatinda yakalandi."
+    ],
+    "notes": "Faruk, kehanet oylamasinda dengeyi bozan kilit oy verdi."
+  }
+]

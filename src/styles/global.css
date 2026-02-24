@@ -122,3 +122,13 @@ th,td { border-bottom: 1px solid var(--line); padding: .55rem; text-align: left;
   .card--wide { grid-column: span 1; }
   .hero__title-row { flex-wrap: wrap; }
 }
+
+
+.session-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin-top: .8rem; }
+.session-card { border: 1px solid var(--line); border-radius: .7rem; padding: .8rem; background: rgba(8,9,13,.38); }
+.session-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; margin: .6rem 0 .75rem; }
+.session-metrics div { border: 1px dashed var(--line); border-radius: .5rem; padding: .35rem .45rem; }
+.session-metrics dt { color: var(--muted); font-size: .78rem; }
+.session-metrics dd { margin: .1rem 0 0; font-weight: 700; }
+.session-spotlights { margin: 0 0 .6rem; padding-left: 1rem; }
+.session-spotlights li { margin: .28rem 0; }
