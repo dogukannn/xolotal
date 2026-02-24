@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import sessions from '../data/sessions.json';
 
 const sayings = [
   'Trisk’te yasam, avlanilan canliya degil onu buyutene saygiyla olculur.',
@@ -52,6 +53,7 @@ const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
 const voteActions = ['House Minor Yetki Oyu', '3 Tehdit Noktasi Savunmasi', 'Kurtarici Yaratik Kehaneti'];
 const allowedPlayers = ['Lakin', 'Tenok', 'Faruk'];
 const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
+const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 
 <BaseLayout title="Xolotan Hanesi | Trisk Kayitlari">
@@ -140,6 +142,42 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
         <li><time datetime="10201-01-05">10201.01.05</time><p>Minor tehdit: din satiliyor, titanlarin evrenin sonu olacagina inanc pazarlaniyor.</p></li>
         <li><time datetime="10201-01-07">10201.01.07</time><p>3 tehdit noktasi icin senato acil oylamaya gitti; monarsi ile gerilim artti.</p></li>
       </ul>
+    </section>
+
+    <section class="card card--wide">
+      <h2>Session Arsivi</h2>
+      <p class="section-intro">Her oturumda tehdit puani, momentum, determination puani ve spotlight notlarini takip edin.</p>
+      <div class="session-grid">
+        {orderedSessions.map((session) => (
+          <article class="session-card">
+            <header>
+              <h3>{session.title}</h3>
+              <p class="fine-print">{session.date}</p>
+            </header>
+            <dl class="session-metrics">
+              <div>
+                <dt>Threat Points</dt>
+                <dd>{session.threatPoints}</dd>
+              </div>
+              <div>
+                <dt>Momentum</dt>
+                <dd>{session.momentum}</dd>
+              </div>
+              <div>
+                <dt>Determination</dt>
+                <dd>{session.determinationPoints}</dd>
+              </div>
+            </dl>
+            <h4>Session Spotlights</h4>
+            <ul class="session-spotlights">
+              {session.spotlights.map((spotlight) => (
+                <li>{spotlight}</li>
+              ))}
+            </ul>
+            {session.notes && <p class="fine-print">Not: {session.notes}</p>}
+          </article>
+        ))}
+      </div>
     </section>
 
     <section class="card">
