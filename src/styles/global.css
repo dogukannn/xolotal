@@ -56,27 +56,23 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
 
 .senate-section { overflow: hidden; }
 .senate-arc {
-  --size: 34rem;
   position: relative;
-  width: var(--size);
-  max-width: 100%;
-  height: calc(var(--size) / 2 + 2.4rem);
+  width: min(100%, 54rem);
+  aspect-ratio: 10 / 6;
   margin: 1.2rem auto 1.4rem;
+  overflow: hidden;
 }
 .senate-seat {
-  --angle: calc(-180deg + ((180deg / (var(--columns) - 1)) * var(--column)));
-  --radius: calc((var(--size) / 2) - 1.6rem - (var(--row) * 1.15rem));
   position: absolute;
-  bottom: .8rem;
-  left: 50%;
-  width: 2.8rem;
-  height: .5rem;
-  border-radius: .35rem;
+  left: var(--x);
+  top: var(--y);
+  width: clamp(.78rem, 1.15vw, .92rem);
+  height: clamp(.78rem, 1.15vw, .92rem);
+  border-radius: 999px;
   background: var(--seat-color);
-  border: 1px solid rgba(255,255,255,.2);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--seat-color) 50%, transparent);
-  transform: rotate(var(--angle)) translateY(calc(var(--radius) * -1)) translateX(-50%);
-  transform-origin: center calc(var(--radius) + .25rem);
+  border: 1px solid rgba(255,255,255,.28);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--seat-color) 58%, transparent);
+  transform: translate(-50%, -50%);
 }
 .party-legend { display: grid; gap: .45rem; list-style: none; margin: 1rem 0 0; padding: 0; }
 .party-legend li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .55rem; }

@@ -1,4 +1,6 @@
 import type { APIRoute } from 'astro';
+
+export const prerender = false;
 const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
 const firebaseVotesEndpoint = `${firebaseBaseUrl}/votes.json`;
 const actions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];

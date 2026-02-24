@@ -17,15 +17,38 @@ const parties = [
   { name: 'Frontier Coalition', seats: 18, color: '#f28ea7' }
 ];
 
-const senateColumns = 20;
-
-const senateSeats = parties.flatMap((party) =>
+const seatPool = parties.flatMap((party) =>
   Array.from({ length: party.seats }, (_, idx) => ({
     id: `${party.name}-${idx + 1}`,
     party: party.name,
     color: party.color
   }))
 );
+
+const senateRows = [14, 18, 22, 22, 24];
+const minRadius = 26;
+const radiusStep = 8.5;
+const startAngle = 165;
+const endAngle = 15;
+
+const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
+  const radius = minRadius + rowIndex * radiusStep;
+
+  return Array.from({ length: rowSeats }, (_, colIndex) => {
+    const seat = seatPool.shift();
+    const ratio = rowSeats === 1 ? 0.5 : colIndex / (rowSeats - 1);
+    const angleDeg = startAngle - (startAngle - endAngle) * ratio;
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const x = 50 + radius * Math.cos(angleRad);
+    const y = 90 - radius * Math.sin(angleRad);
+
+    return {
+      ...(seat || { id: `seat-${rowIndex}-${colIndex}`, party: 'Independent', color: '#d8b26a' }),
+      x: x.toFixed(2),
+      y: y.toFixed(2)
+    };
+  });
+});
 
 const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];
 ---
@@ -61,7 +84,7 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
           senateSeats.map((seat, idx) => (
             <span
               class="senate-seat"
-              style={`--column:${idx % senateColumns}; --row:${Math.floor(idx / senateColumns)}; --columns:${senateColumns}; --seat-color:${seat.color};`}
+              style={`--x:${seat.x}%; --y:${seat.y}%; --seat-color:${seat.color};`}
               title={`${seat.party} seat ${idx + 1}`}
             ></span>
           ))
