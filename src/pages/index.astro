@@ -1,21 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import sessions from '../data/sessions.json';
-
-const sayings = [
-  'Trisk’te yasam, avlanilan canliya degil onu buyutene saygiyla olculur.',
-  'Kusursuz olan hayatta kalir; sadik olan yonetir.',
-  'Broodmother’ın sesi, saray ormaninin tum ciftliklerinde yankilanir.',
-  'Biyocesitlilik bolluk getirir ama esitlik getirmez.',
-  'Senato ile monarsi catistiginda halk isyanin adini koyar.'
-];
-
-const parties = [
-  { name: 'Monarsi Yanlilari', seats: 36, color: '#d8b26a' },
-  { name: 'Senato Bloku', seats: 28, color: '#77c9ff' },
-  { name: 'Isyanci Grup', seats: 22, color: '#79df9c' },
-  { name: 'Anerkil Konfederasyon', seats: 14, color: '#f28ea7' }
-];
+import sayings from '../data/sayings.json';
+import parties from '../data/senate-parties.json';
+import voteActions from '../data/vote-actions.json';
+import briefings from '../data/house-minor-briefings.json';
+import settlements from '../data/settlements.json';
+import powerStandings from '../data/power-standings.json';
+import notableCharacters from '../data/notable-characters.json';
+import ruler from '../data/ruler.json';
 
 const seatPool = parties.flatMap((party) =>
   Array.from({ length: party.seats }, (_, idx) => ({
@@ -50,7 +43,6 @@ const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
   });
 });
 
-const voteActions = ['House Minor Yetki Oyu', '3 Tehdit Noktasi Savunmasi', 'Kurtarici Yaratik Kehaneti'];
 const allowedPlayers = ['Lakin', 'Tenok', 'Faruk'];
 const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
 const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -63,6 +55,14 @@ const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() 
       <p class="eyebrow">Trisk Saray Kayitlari</p>
       <div class="hero__title-row">
         <h1>Xolotan Hanesi</h1>
+        <aside class="ruler-card">
+          <img src={ruler.portraitUrl} alt={ruler.portraitAlt} loading="lazy" />
+          <div>
+            <p class="fine-print">Current Ruler</p>
+            <strong>{ruler.name}</strong>
+            <p>{ruler.title}</p>
+          </div>
+        </aside>
         <div class="sigil" role="img" aria-label="Xolotan Hanesi arması">
           <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 6L108 28V70C108 100 89 122 60 134C31 122 12 100 12 70V28L60 6Z" />
@@ -138,9 +138,12 @@ const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() 
     <section class="card card--wide">
       <h2>House Minor Brifingi</h2>
       <ul class="timeline">
-        <li><time datetime="10201-01-03">10201.01.03</time><p>Major tehdit: hayvan genetigi degistirip satmaca agi Trisk genelinde karaborsa yaratti.</p></li>
-        <li><time datetime="10201-01-05">10201.01.05</time><p>Minor tehdit: din satiliyor, titanlarin evrenin sonu olacagina inanc pazarlaniyor.</p></li>
-        <li><time datetime="10201-01-07">10201.01.07</time><p>3 tehdit noktasi icin senato acil oylamaya gitti; monarsi ile gerilim artti.</p></li>
+        {briefings.map((entry) => (
+          <li>
+            <time datetime={entry.date}>{entry.date.replaceAll('-', '.')}</time>
+            <p>{entry.note}</p>
+          </li>
+        ))}
       </ul>
     </section>
 
@@ -183,23 +186,35 @@ const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() 
     <section class="card">
       <h2>Trisk Yerlesimleri</h2>
       <ul class="stat-list">
-        <li><span>Milyonluk Sehir I</span><strong>Ankara Nova</strong></li>
-        <li><span>Milyonluk Sehir II</span><strong>Istanbur Prime</strong></li>
-        <li><span>Milyonluk Sehir III</span><strong>Izmir Delta</strong></li>
-        <li><span>Ada Yerlesimi</span><strong>Serit Ada</strong></li>
+        {settlements.map((item) => (
+          <li><span>{item.label}</span><strong>{item.value}</strong></li>
+        ))}
       </ul>
     </section>
 
     <section class="card">
       <h2>Guc Dengesi ve Kisiler</h2>
       <ol class="standings">
-        <li><span>Kralice 4. Serena</span><strong>Dogu yurtlarinin fatihi</strong></li>
-        <li><span>Patron Jinping</span><strong>Cip adami cinli</strong></li>
-        <li><span>Yusa "Lakin"</span><strong>Suk dropoutu</strong></li>
-        <li><span>Eray "Tenok"</span><strong>Dinci</strong></li>
-        <li><span>Yusuf "Faruk Naib"</span><strong>Fremen gorusu</strong></li>
+        {powerStandings.standings.map((item) => (
+          <li><span>{item.name}</span><strong>{item.title}</strong></li>
+        ))}
       </ol>
-      <p class="fine-print">Rivaller: Loathing ve Servitude. Resmi kiyafet: Hun pazarlama AS renkleri.</p>
+      <p class="fine-print">Rivaller: {powerStandings.rivals}. Resmi kiyafet: {powerStandings.uniform}.</p>
+    </section>
+
+    <section class="card card--wide">
+      <h2>Deneysel Portre Galerisi</h2>
+      <p class="section-intro">Notable karakterleri portreleriyle takip edin; olay bazli notlar icin JSON kaydini guncelleyin.</p>
+      <div class="portrait-grid">
+        {notableCharacters.map((character) => (
+          <article class="portrait-card">
+            <img src={character.portraitUrl} alt={character.portraitAlt} loading="lazy" />
+            <h3>{character.name}</h3>
+            <p class="fine-print">{character.title}</p>
+            {character.notes && <p>{character.notes}</p>}
+          </article>
+        ))}
+      </div>
     </section>
   </main>
 

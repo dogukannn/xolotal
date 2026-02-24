@@ -39,6 +39,30 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
 .sigil .inner { fill: rgba(216,178,106,.06); }
 .sigil .worm { fill: var(--accent); stroke: none; }
 
+.ruler-card {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  border: 1px solid var(--line);
+  border-radius: .7rem;
+  padding: .45rem;
+  background: rgba(8,9,13,.45);
+}
+.ruler-card img {
+  width: 52px;
+  height: 52px;
+  border-radius: .55rem;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+.ruler-card p { margin: 0; }
+
+.portrait-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.portrait-card { border: 1px solid var(--line); border-radius: .7rem; padding: .7rem; background: rgba(8,9,13,.38); }
+.portrait-card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: .6rem; margin-bottom: .55rem; }
+
+
 .layout { max-width: 72rem; margin: 1rem auto 2rem; padding: 0 1.25rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
 .card {
   background: linear-gradient(180deg, rgba(21,25,34,.95), rgba(15,17,24,.96));
