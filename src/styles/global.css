@@ -56,27 +56,27 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
 
 .senate-section { overflow: hidden; }
 .senate-arc {
-  --size: 21rem;
+  --size: 34rem;
   position: relative;
   width: var(--size);
-  height: calc(var(--size) / 2 + .5rem);
-  margin: 1rem auto;
+  max-width: 100%;
+  height: calc(var(--size) / 2 + 2.4rem);
+  margin: 1.2rem auto 1.4rem;
 }
 .senate-seat {
-  --total: 100;
-  --angle: calc(-180deg + ((180deg / (var(--total) - 1)) * var(--index)));
-  --radius: 9rem;
+  --angle: calc(-180deg + ((180deg / (var(--columns) - 1)) * var(--column)));
+  --radius: calc((var(--size) / 2) - 1.6rem - (var(--row) * 1.15rem));
   position: absolute;
-  bottom: .3rem;
+  bottom: .8rem;
   left: 50%;
-  width: .62rem;
-  height: .62rem;
-  border-radius: 999px;
+  width: 2.8rem;
+  height: .5rem;
+  border-radius: .35rem;
   background: var(--seat-color);
-  border: 1px solid rgba(255,255,255,.24);
+  border: 1px solid rgba(255,255,255,.2);
   box-shadow: 0 0 8px color-mix(in srgb, var(--seat-color) 50%, transparent);
-  transform: rotate(var(--angle)) translateY(calc(var(--radius) * -1));
-  transform-origin: center calc(var(--radius) + .31rem);
+  transform: rotate(var(--angle)) translateY(calc(var(--radius) * -1)) translateX(-50%);
+  transform-origin: center calc(var(--radius) + .25rem);
 }
 .party-legend { display: grid; gap: .45rem; list-style: none; margin: 1rem 0 0; padding: 0; }
 .party-legend li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .55rem; }
