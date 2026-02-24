@@ -57,20 +57,22 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
       <p class="eyebrow">Trisk Saray Kayitlari</p>
       <div class="hero__title-row">
         <h1>Xolotan Hanesi</h1>
-        <aside class="ruler-card">
-          <img src={resolveImageUrl(ruler.portraitUrl)} alt={ruler.portraitAlt} width={ruler.width} height={ruler.height} loading="lazy" />
-          <div>
-            <p class="fine-print">Current Ruler</p>
-            <strong>{ruler.name}</strong>
-            <p>{ruler.title}</p>
+        <div class="hero__crest">
+          <aside class="ruler-card">
+            <img src={resolveImageUrl(ruler.portraitUrl)} alt={ruler.portraitAlt} width={ruler.width} height={ruler.height} loading="lazy" />
+            <div>
+              <p class="fine-print">Current Ruler</p>
+              <strong>{ruler.name}</strong>
+              <p>{ruler.title}</p>
+            </div>
+          </aside>
+          <div class="sigil" role="img" aria-label="Xolotan Hanesi arması">
+            <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+              <path d="M60 6L108 28V70C108 100 89 122 60 134C31 122 12 100 12 70V28L60 6Z" />
+              <path d="M60 25L83 35V69C83 83 74 96 60 104C46 96 37 83 37 69V35L60 25Z" class="inner"/>
+              <path d="M60 39C70 47 72 61 64 71C59 77 58 84 60 93C49 84 43 74 44 62C45 51 51 44 60 39Z" class="worm"/>
+            </svg>
           </div>
-        </aside>
-        <div class="sigil" role="img" aria-label="Xolotan Hanesi arması">
-          <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
-            <path d="M60 6L108 28V70C108 100 89 122 60 134C31 122 12 100 12 70V28L60 6Z" />
-            <path d="M60 25L83 35V69C83 83 74 96 60 104C46 96 37 83 37 69V35L60 25Z" class="inner"/>
-            <path d="M60 39C70 47 72 61 64 71C59 77 58 84 60 93C49 84 43 74 44 62C45 51 51 44 60 39Z" class="worm"/>
-          </svg>
         </div>
       </div>
       <p>

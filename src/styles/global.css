@@ -34,13 +34,18 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
 .hero__content { max-width: 72rem; margin: 0 auto; padding: 4rem 1.25rem 3rem; position: relative; z-index: 1; }
 .eyebrow { text-transform: uppercase; color: var(--accent); letter-spacing: .2em; font-size: .75rem; font-weight: 700; }
 .hero__title-row { display: flex; gap: 1rem; align-items: center; }
+.hero__crest {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+}
 .sigil { width: 78px; height: 92px; filter: drop-shadow(0 4px 14px rgba(216,178,106,.25)); }
 .sigil svg path { fill: rgba(216,178,106,.22); stroke: var(--accent); stroke-width: 2; }
 .sigil .inner { fill: rgba(216,178,106,.06); }
 .sigil .worm { fill: var(--accent); stroke: none; }
 
 .ruler-card {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: .6rem;
@@ -147,6 +152,21 @@ th,td { border-bottom: 1px solid var(--line); padding: .55rem; text-align: left;
   .layout { grid-template-columns: 1fr; }
   .card--wide { grid-column: span 1; }
   .hero__title-row { flex-wrap: wrap; }
+  .hero__crest {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .ruler-card {
+    flex: 1;
+    min-width: 0;
+  }
+  .sigil {
+    width: 64px;
+    height: 76px;
+    flex-shrink: 0;
+  }
 }
 
 
