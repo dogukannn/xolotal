@@ -50,17 +50,19 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
   background: rgba(8,9,13,.45);
 }
 .ruler-card img {
-  width: 52px;
-  height: 52px;
+  width: clamp(52px, 8vw, 84px);
+  height: auto;
+  max-height: 84px;
   border-radius: .55rem;
-  object-fit: cover;
+  object-fit: contain;
   border: 1px solid var(--line);
+  background: rgba(8,9,13,.6);
 }
 .ruler-card p { margin: 0; }
 
 .portrait-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
 .portrait-card { border: 1px solid var(--line); border-radius: .7rem; padding: .7rem; background: rgba(8,9,13,.38); }
-.portrait-card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: .6rem; margin-bottom: .55rem; }
+.portrait-card img { width: 100%; height: auto; object-fit: contain; border-radius: .6rem; margin-bottom: .55rem; background: rgba(8,9,13,.6); }
 
 
 .layout { max-width: 72rem; margin: 1rem auto 2rem; padding: 0 1.25rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
