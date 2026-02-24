@@ -21,3 +21,14 @@ Then open `http://localhost:4321`.
 npm run build
 npm run preview
 ```
+
+
+## Deploy to GitHub Pages
+
+This repo includes `.github/workflows/deploy.yml`, which automatically builds and deploys the site to GitHub Pages every time you push to `main`.
+
+1. In GitHub, go to **Settings → Pages**.
+2. Set **Source** to **GitHub Actions**.
+3. Push to `main` and the workflow will publish `dist/`.
+
+> Note: votes are now loaded/saved directly from Firebase in the browser, which keeps the site compatible with static hosting on GitHub Pages.

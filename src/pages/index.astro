@@ -26,8 +26,8 @@ const seatPool = parties.flatMap((party) =>
 );
 
 const senateRows = [14, 18, 22, 22, 24];
-const minRadius = 26;
-const radiusStep = 8.5;
+const minRadius = 22;
+const radiusStep = 6;
 const startAngle = 165;
 const endAngle = 15;
 
@@ -51,6 +51,7 @@ const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
 });
 
 const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];
+const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
 ---
 
 <BaseLayout title="Chronicles of House Xolotal | Dune Ledger">
@@ -171,11 +172,25 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
     if (quoteNode) quoteNode.textContent = `“${quote}”`;
 
     const statusNode = document.getElementById('vote-status');
+    const firebaseVotesEndpoint = `${firebaseBaseUrl}/votes.json`;
     const inputNode = document.getElementById('player-name');
     const cards = [...document.querySelectorAll('.vote-card')];
 
     const setStatus = (message) => {
       if (statusNode) statusNode.textContent = message;
+    };
+
+    const summarize = (votes) => {
+      return voteActions.map((actionId) => {
+        const tally = { support: 0, oppose: 0, abstain: 0 };
+        votes
+          .filter((vote) => vote.actionId === actionId)
+          .forEach((vote) => {
+            if (vote.choice in tally) tally[vote.choice] += 1;
+          });
+
+        return { actionId, tally };
+      });
     };
 
     const renderTotals = (totals) => {
@@ -187,10 +202,31 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
       });
     };
 
-    const loadTotals = async () => {
-      const response = await fetch('/api/votes.json');
+    const loadVotes = async () => {
+      const response = await fetch(firebaseVotesEndpoint);
       const payload = await response.json();
-      renderTotals(payload.totals || []);
+      if (!response.ok) throw new Error('Failed to load votes');
+      if (!payload || typeof payload !== 'object') return [];
+      return Object.values(payload);
+    };
+
+    const saveVote = async (entry) => {
+      const voteKey = `${entry.actionId.toLowerCase().replace(/[^a-z0-9]+/g, '-')}_${entry.player
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')}`;
+
+      const response = await fetch(`${firebaseBaseUrl}/votes/${voteKey}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entry)
+      });
+
+      if (!response.ok) throw new Error('Could not save vote.');
+    };
+
+    const loadTotals = async () => {
+      const votes = await loadVotes();
+      renderTotals(summarize(votes));
       setStatus('Vote totals synced.');
     };
 
@@ -211,28 +247,25 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
 
         setStatus(`Submitting ${button.dataset.choice} vote on ${actionId}…`);
 
-        const response = await fetch('/api/votes.json', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ actionId, player, choice: button.dataset.choice })
-        });
-
-        if (!response.ok) {
-          const err = await response.json().catch(() => ({}));
-          setStatus(err.error || 'Vote submission failed.');
-          return;
+        try {
+          await saveVote({
+            actionId,
+            player,
+            choice: button.dataset.choice,
+            updatedAt: new Date().toISOString()
+          });
+          await loadTotals();
+          localStorage.setItem('arrakis-player-name', player);
+          setStatus(`${player} voted ${button.dataset.choice} on ${actionId}.`);
+        } catch {
+          setStatus('Vote submission failed.');
         }
-
-        const payload = await response.json();
-        renderTotals(payload.totals || []);
-        localStorage.setItem('arrakis-player-name', player);
-        setStatus(`${player} voted ${button.dataset.choice} on ${actionId}.`);
       });
     });
 
     const savedPlayer = localStorage.getItem('arrakis-player-name');
     if (savedPlayer && inputNode && !inputNode.value) inputNode.value = savedPlayer;
 
-    loadTotals().catch(() => setStatus('Vote server offline. Start Astro in server mode to collect live votes.'));
+    loadTotals().catch(() => setStatus('Vote backend unreachable. Check Firebase availability and CORS settings.'));
   </script>
 </BaseLayout>
