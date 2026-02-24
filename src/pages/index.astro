@@ -17,6 +17,8 @@ const parties = [
   { name: 'Frontier Coalition', seats: 18, color: '#f28ea7' }
 ];
 
+const senateColumns = 20;
+
 const senateSeats = parties.flatMap((party) =>
   Array.from({ length: party.seats }, (_, idx) => ({
     id: `${party.name}-${idx + 1}`,
@@ -28,14 +30,14 @@ const senateSeats = parties.flatMap((party) =>
 const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];
 ---
 
-<BaseLayout title="Chronicles of House Sereth | Dune Ledger">
+<BaseLayout title="Chronicles of House Xolotal | Dune Ledger">
   <header class="hero">
     <div class="hero__veil"></div>
     <div class="hero__content">
       <p class="eyebrow">Arrakis Campaign Ledger</p>
       <div class="hero__title-row">
-        <h1>Chronicles of House Sereth</h1>
-        <div class="sigil" role="img" aria-label="House Sereth sigil">
+        <h1>Chronicles of House Xolotal</h1>
+        <div class="sigil" role="img" aria-label="House Xolotal sigil">
           <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 6L108 28V70C108 100 89 122 60 134C31 122 12 100 12 70V28L60 6Z" />
             <path d="M60 25L83 35V69C83 83 74 96 60 104C46 96 37 83 37 69V35L60 25Z" class="inner"/>
@@ -45,19 +47,23 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
       </div>
       <p>
         From the sands of Arrakis to the halls of the Landsraad, monitor treaties, spice, and intrigue while
-        House Sereth rises beneath the desert moon.
+        House Xolotal rises beneath the desert moon.
       </p>
     </div>
   </header>
 
   <main class="layout">
     <section class="card card--wide senate-section">
-      <h2>Landsraad Senate (100 Seats)</h2>
-      <p class="section-intro">Each seat belongs to one of four active factions. Dots are placed in a semi-circular chamber.</p>
+      <h2>Kontor (100 Seats)</h2>
+      <p class="section-intro">Each seat belongs to one of four active factions. Seats are placed in a broad chamber arc.</p>
       <div class="senate-arc" role="img" aria-label="Semicircle senate seating with 100 members">
         {
           senateSeats.map((seat, idx) => (
-            <span class="senate-seat" style={`--index:${idx}; --seat-color:${seat.color};`} title={`${seat.party} seat ${idx + 1}`}></span>
+            <span
+              class="senate-seat"
+              style={`--column:${idx % senateColumns}; --row:${Math.floor(idx / senateColumns)}; --columns:${senateColumns}; --seat-color:${seat.color};`}
+              title={`${seat.party} seat ${idx + 1}`}
+            ></span>
           ))
         }
       </div>
@@ -97,7 +103,7 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
       <h2>Imperial Dispatches</h2>
       <p class="section-intro">Recent whispers carried by ornithopter and courier.</p>
       <ul class="timeline">
-        <li><time datetime="10191-04-17">Cycle 10191.04.17</time><p>Fremen scouts confirmed pre-spice mass near the Cielago ridge. House Sereth claims extraction rights at dawn.</p></li>
+        <li><time datetime="10191-04-17">Cycle 10191.04.17</time><p>Fremen scouts confirmed pre-spice mass near the Cielago ridge. House Xolotal claims extraction rights at dawn.</p></li>
         <li><time datetime="10191-04-12">Cycle 10191.04.12</time><p>An imperial observer vessel entered low orbit, forcing every minor house to issue public pledges of loyalty.</p></li>
         <li><time datetime="10191-04-05">Cycle 10191.04.05</time><p>A clandestine CHOAM envoy offered shipping priority in exchange for senate leverage against House Moritani.</p></li>
       </ul>
@@ -119,7 +125,7 @@ const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild
         <li><span>House Corrino</span><strong>92</strong></li>
         <li><span>House Atreides</span><strong>89</strong></li>
         <li><span>House Harkonnen</span><strong>86</strong></li>
-        <li><span>House Sereth</span><strong>74</strong></li>
+        <li><span>House Xolotal</span><strong>74</strong></li>
       </ol>
       <p class="fine-print">Scores represent political favor and vote-weight this cycle.</p>
     </section>

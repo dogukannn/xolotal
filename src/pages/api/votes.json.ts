@@ -1,8 +1,6 @@
 import type { APIRoute } from 'astro';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
-
-const voteStore = resolve(process.cwd(), 'data', 'votes.json');
+const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
+const firebaseVotesEndpoint = `${firebaseBaseUrl}/votes.json`;
 const actions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];
 
 type VoteChoice = 'support' | 'oppose' | 'abstain';
@@ -18,20 +16,34 @@ type VoteFile = {
   votes: VoteRecord[];
 };
 
-const emptyVoteFile: VoteFile = { votes: [] };
+async function readVotes(): Promise<VoteRecord[]> {
+  const response = await fetch(firebaseVotesEndpoint);
 
-async function readVoteFile(): Promise<VoteFile> {
-  try {
-    const raw = await readFile(voteStore, 'utf8');
-    return JSON.parse(raw) as VoteFile;
-  } catch {
-    return emptyVoteFile;
+  if (!response.ok) {
+    throw new Error(`Failed to load votes from Firebase (${response.status})`);
   }
+
+  const payload = (await response.json()) as Record<string, VoteRecord> | null;
+  if (!payload || typeof payload !== 'object') return [];
+
+  return Object.values(payload);
 }
 
-async function writeVoteFile(payload: VoteFile): Promise<void> {
-  await mkdir(dirname(voteStore), { recursive: true });
-  await writeFile(voteStore, JSON.stringify(payload, null, 2), 'utf8');
+function voteKey(actionId: string, player: string): string {
+  return `${actionId.toLowerCase().replace(/[^a-z0-9]+/g, '-')}_${player.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+}
+
+async function upsertVote(entry: VoteRecord): Promise<void> {
+  const key = voteKey(entry.actionId, entry.player);
+  const response = await fetch(`${firebaseBaseUrl}/votes/${key}.json`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(entry)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to save vote to Firebase (${response.status})`);
+  }
 }
 
 function summarize(votes: VoteRecord[]) {
@@ -48,10 +60,14 @@ function summarize(votes: VoteRecord[]) {
 }
 
 export const GET: APIRoute = async () => {
-  const file = await readVoteFile();
-  return new Response(JSON.stringify({ totals: summarize(file.votes), votes: file.votes.length }), {
-    headers: { 'Content-Type': 'application/json' }
-  });
+  try {
+    const votes = await readVotes();
+    return new Response(JSON.stringify({ totals: summarize(votes), votes: votes.length }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch {
+    return new Response(JSON.stringify({ error: 'Could not load vote totals from Firebase.' }), { status: 502 });
+  }
 };
 
 export const POST: APIRoute = async ({ request }) => {
@@ -76,19 +92,15 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: 'Invalid vote option.' }), { status: 400 });
   }
 
-  const file = await readVoteFile();
-  const idx = file.votes.findIndex((vote) => vote.actionId === actionId && vote.player.toLowerCase() === player.toLowerCase());
   const entry: VoteRecord = { actionId, player, choice, updatedAt: new Date().toISOString() };
+  try {
+    await upsertVote(entry);
+    const votes = await readVotes();
 
-  if (idx >= 0) {
-    file.votes[idx] = entry;
-  } else {
-    file.votes.push(entry);
+    return new Response(JSON.stringify({ totals: summarize(votes) }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch {
+    return new Response(JSON.stringify({ error: 'Could not save vote to Firebase.' }), { status: 502 });
   }
-
-  await writeVoteFile(file);
-
-  return new Response(JSON.stringify({ totals: summarize(file.votes) }), {
-    headers: { 'Content-Type': 'application/json' }
-  });
 };
