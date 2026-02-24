@@ -53,3 +53,18 @@ The script asks for:
 
 The page renders entries from `src/data/sessions.json` in the **Session Arsivi** section.
 
+
+
+## JSON-driven layouts and update scripts
+
+Most page sections now read from JSON files under `src/data` so you can edit campaign notes per session without touching templates.
+
+- Sayings: `src/data/sayings.json` → `pwsh ./scripts/add-saying.ps1`
+- Sessions: `src/data/sessions.json` → `pwsh ./scripts/add-session.ps1`
+- House Minor briefings: `src/data/house-minor-briefings.json` → `pwsh ./scripts/add-briefing-note.ps1`
+- Vote actions: `src/data/vote-actions.json` → `pwsh ./scripts/add-vote-action.ps1`
+- Senate parties: `src/data/senate-parties.json` → `pwsh ./scripts/add-senate-party.ps1`
+- Settlements: `src/data/settlements.json` → `pwsh ./scripts/add-settlement.ps1`
+- Power standings: `src/data/power-standings.json` → `pwsh ./scripts/add-standing.ps1`
+- Current ruler section: `src/data/ruler.json` → `pwsh ./scripts/update-ruler.ps1`
+- Experimental notable character portraits: `src/data/notable-characters.json` → `pwsh ./scripts/add-notable-character.ps1`

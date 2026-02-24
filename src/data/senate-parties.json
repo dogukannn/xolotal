@@ -1,0 +1,6 @@
+[
+  { "name": "Monarsi Yanlilari", "seats": 36, "color": "#d8b26a" },
+  { "name": "Senato Bloku", "seats": 28, "color": "#77c9ff" },
+  { "name": "Isyanci Grup", "seats": 22, "color": "#79df9c" },
+  { "name": "Anerkil Konfederasyon", "seats": 14, "color": "#f28ea7" }
+]
