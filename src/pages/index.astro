@@ -46,6 +46,8 @@ const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
 const allowedPlayers = ['Lakin', 'Tenok', 'Faruk'];
 const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
 const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const imageBaseUrl = 'https://dogukannn.github.io/xolotal';
+const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}${url}` : url);
 ---
 
 <BaseLayout title="Xolotan Hanesi | Trisk Kayitlari">
@@ -56,7 +58,7 @@ const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() 
       <div class="hero__title-row">
         <h1>Xolotan Hanesi</h1>
         <aside class="ruler-card">
-          <img src={ruler.portraitUrl} alt={ruler.portraitAlt} loading="lazy" />
+          <img src={resolveImageUrl(ruler.portraitUrl)} alt={ruler.portraitAlt} width={ruler.width} height={ruler.height} loading="lazy" />
           <div>
             <p class="fine-print">Current Ruler</p>
             <strong>{ruler.name}</strong>
@@ -208,7 +210,13 @@ const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() 
       <div class="portrait-grid">
         {notableCharacters.map((character) => (
           <article class="portrait-card">
-            <img src={character.portraitUrl} alt={character.portraitAlt} loading="lazy" />
+            <img
+              src={resolveImageUrl(character.portraitUrl)}
+              alt={character.portraitAlt}
+              width={character.width}
+              height={character.height}
+              loading="lazy"
+            />
             <h3>{character.name}</h3>
             <p class="fine-print">{character.title}</p>
             {character.notes && <p>{character.notes}</p>}

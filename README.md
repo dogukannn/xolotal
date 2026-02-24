@@ -33,65 +33,46 @@ This repo includes `.github/workflows/deploy.yml`, which automatically builds an
 
 > Note: votes are now loaded/saved directly from Firebase in the browser, which keeps the site compatible with static hosting on GitHub Pages.
 
+## Update JSON content with one interactive script
 
-## Add a new session entry (PowerShell)
-
-Run the script and answer the interactive prompts:
+All update scripts are merged into a single interactive PowerShell command:
 
 ```powershell
-pwsh ./scripts/add-session.ps1
+npm run manage:data
 ```
 
-The script asks for:
-- session title
-- date
-- threat points
-- momentum
-- determination points
-- spotlight items (multiple, one per line)
-- optional notes
+When launched, the script asks what to update, then asks only the relevant fields.
 
-The page renders entries from `src/data/sessions.json` in the **Session Arsivi** section.
+Available actions:
+- Add saying
+- Add vote action
+- Add House Minor briefing note
+- Add settlement
+- Add senate party
+- Add power standing
+- Add session
+- Update ruler
+- Add notable character
 
+## Notable character image rules
 
+- `portraitUrl` for both notable characters and ruler must point to a file under `public/images` using `/images/...` paths.
+- The image file must already exist in the repo.
+- Notable character entries and the ruler entry use `width` and `height` in JSON to control rendered image size without cropping.
 
-## JSON-driven layouts and update scripts
-
-Most page sections now read from JSON files under `src/data` so you can edit campaign notes per session without touching templates.
-
-- Sayings: `src/data/sayings.json` → `pwsh ./scripts/add-saying.ps1`
-- Sessions: `src/data/sessions.json` → `pwsh ./scripts/add-session.ps1`
-- House Minor briefings: `src/data/house-minor-briefings.json` → `pwsh ./scripts/add-briefing-note.ps1`
-- Vote actions: `src/data/vote-actions.json` → `pwsh ./scripts/add-vote-action.ps1`
-- Senate parties: `src/data/senate-parties.json` → `pwsh ./scripts/add-senate-party.ps1`
-- Settlements: `src/data/settlements.json` → `pwsh ./scripts/add-settlement.ps1`
-- Power standings: `src/data/power-standings.json` → `pwsh ./scripts/add-standing.ps1`
-- Current ruler section: `src/data/ruler.json` → `pwsh ./scripts/update-ruler.ps1`
-- Experimental notable character portraits: `src/data/notable-characters.json` → `pwsh ./scripts/add-notable-character.ps1`
-
-### Sync notable portraits into the repository
-
-If you want portrait images committed into the repo and resized from JSON-defined dimensions:
-
-1. Add an `image` block per character in `src/data/notable-characters.json`:
+Example entry:
 
 ```json
 {
   "name": "Example",
-  "portraitUrl": "https://...",
-  "image": {
-    "sourceUrl": "https://...",
-    "width": 480,
-    "height": 480
-  }
+  "title": "Speaker",
+  "portraitUrl": "/images/notable-characters/example.jpg",
+  "portraitAlt": "Example portrait",
+  "notes": "Optional notes",
+  "width": 480,
+  "height": 640
 }
 ```
 
-2. Run:
 
-```bash
-npm run sync:portraits
-```
-
-This command downloads each `image.sourceUrl`, rescales it to the JSON resolution, saves it under `public/images/notable-characters`, and rewrites `portraitUrl` to the local repo path.
-
+Images are rendered from the GitHub Pages subpath base: `https://dogukannn.github.io/xolotal` (for `/images/...` assets).
