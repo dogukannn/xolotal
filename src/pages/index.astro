@@ -2,19 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const sayings = [
-  'Fear is the mind-killer. Fear is the little-death that brings total obliteration.',
-  'A beginning is a very delicate time.',
-  'He who can destroy a thing controls a thing.',
-  'The mystery of life is not a problem to solve, but a reality to experience.',
-  'Without change, something sleeps inside us, and seldom awakens.',
-  'Arrakis teaches the attitude of the knife—chopping off what is incomplete and saying: Now it is complete.'
+  'Trisk’te yasam, avlanilan canliya degil onu buyutene saygiyla olculur.',
+  'Kusursuz olan hayatta kalir; sadik olan yonetir.',
+  'Broodmother’ın sesi, saray ormaninin tum ciftliklerinde yankilanir.',
+  'Biyocesitlilik bolluk getirir ama esitlik getirmez.',
+  'Senato ile monarsi catistiginda halk isyanin adini koyar.'
 ];
 
 const parties = [
-  { name: 'House Sereth Bloc', seats: 31, color: '#d8b26a' },
-  { name: 'Imperial Loyalists', seats: 27, color: '#77c9ff' },
-  { name: 'CHOAM Compact', seats: 24, color: '#79df9c' },
-  { name: 'Frontier Coalition', seats: 18, color: '#f28ea7' }
+  { name: 'Monarsi Yanlilari', seats: 36, color: '#d8b26a' },
+  { name: 'Senato Bloku', seats: 28, color: '#77c9ff' },
+  { name: 'Isyanci Grup', seats: 22, color: '#79df9c' },
+  { name: 'Anerkil Konfederasyon', seats: 14, color: '#f28ea7' }
 ];
 
 const seatPool = parties.flatMap((party) =>
@@ -43,25 +42,26 @@ const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
     const y = 90 - radius * Math.sin(angleRad);
 
     return {
-      ...(seat || { id: `seat-${rowIndex}-${colIndex}`, party: 'Independent', color: '#d8b26a' }),
+      ...(seat || { id: `seat-${rowIndex}-${colIndex}`, party: 'Bagimsiz', color: '#d8b26a' }),
       x: x.toFixed(2),
       y: y.toFixed(2)
     };
   });
 });
 
-const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];
+const voteActions = ['House Minor Yetki Oyu', '3 Tehdit Noktasi Savunmasi', 'Kurtarici Yaratik Kehaneti'];
+const allowedPlayers = ['Lakin', 'Tenok', 'Faruk'];
 const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
 ---
 
-<BaseLayout title="Chronicles of House Xolotal | Dune Ledger">
+<BaseLayout title="Zolotan Hanesi | Trisk Kayitlari">
   <header class="hero">
     <div class="hero__veil"></div>
     <div class="hero__content">
-      <p class="eyebrow">Arrakis Campaign Ledger</p>
+      <p class="eyebrow">Trisk Saray Kayitlari</p>
       <div class="hero__title-row">
-        <h1>Chronicles of House Xolotal</h1>
-        <div class="sigil" role="img" aria-label="House Xolotal sigil">
+        <h1>Zolotan Hanesi</h1>
+        <div class="sigil" role="img" aria-label="Zolotan Hanesi arması">
           <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
             <path d="M60 6L108 28V70C108 100 89 122 60 134C31 122 12 100 12 70V28L60 6Z" />
             <path d="M60 25L83 35V69C83 83 74 96 60 104C46 96 37 83 37 69V35L60 25Z" class="inner"/>
@@ -70,29 +70,30 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
         </div>
       </div>
       <p>
-        From the sands of Arrakis to the halls of the Landsraad, monitor treaties, spice, and intrigue while
-        House Xolotal rises beneath the desert moon.
+        Gezegen Trisk, dunya benzeri ama ekstra biyocesitlilige sahip bir duzen kurdu. Saray, jungle benzeri
+        bir ormanin ortasinda; etrafi hayvan ciftlikleriyle cevrili. Yerel halk hayvanlarla icli disli yasarken,
+        hane trait’i kusursuzluk olarak bilinir.
       </p>
     </div>
   </header>
 
   <aside class="daily-saying">
-    <h2>Litany of the Day</h2>
+    <h2>Gunluk Söz</h2>
     <blockquote id="daily-quote"></blockquote>
-    <p class="quote-meta">A quote shifts with the imperial cycle each UTC day.</p>
+    <p class="quote-meta">Her UTC gununde Trisk’in soylu kayitlarindan yeni bir soz gelir.</p>
   </aside>
 
   <main class="layout">
     <section class="card card--wide senate-section">
-      <h2>Kontor (100 Seats)</h2>
-      <p class="section-intro">Each seat belongs to one of four active factions. Seats are placed in a broad chamber arc.</p>
-      <div class="senate-arc" role="img" aria-label="Semicircle senate seating with 100 members">
+      <h2>Kontor (100 Koltuk)</h2>
+      <p class="section-intro">Monarsi ve senato carpismasi devam ederken isyanci gruplar dengeyi zorluyor.</p>
+      <div class="senate-arc" role="img" aria-label="Trisk senato dagilimi">
         {
           senateSeats.map((seat, idx) => (
             <span
               class="senate-seat"
               style={`--x:${seat.x}%; --y:${seat.y}%; --seat-color:${seat.color};`}
-              title={`${seat.party} seat ${idx + 1}`}
+              title={`${seat.party} koltuk ${idx + 1}`}
             ></span>
           ))
         }
@@ -102,17 +103,17 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
           <li>
             <span class="party-dot" style={`--party-color:${party.color};`}></span>
             <span>{party.name}</span>
-            <strong>{party.seats} seats</strong>
+            <strong>{party.seats} koltuk</strong>
           </li>
         ))}
       </ul>
     </section>
 
     <section class="card card--wide vote-section">
-      <h2>Player Vote Console</h2>
-      <p class="section-intro">Players can vote from any computer connected to this server. One vote per player name, per action.</p>
-      <label class="vote-label" for="player-name">Player name</label>
-      <input id="player-name" class="vote-input" type="text" maxlength="32" placeholder="e.g. Lady Veyra" />
+      <h2>Oy Konsolu (Toplam 3 Oycu)</h2>
+      <p class="section-intro">Sadece Lakin, Tenok ve Faruk oy verebilir. Bu uc isim disindaki oylar gonderilmez.</p>
+      <label class="vote-label" for="player-name">Oyuncu adi</label>
+      <input id="player-name" class="vote-input" type="text" maxlength="32" placeholder="Lakin / Tenok / Faruk" />
       <div class="vote-grid">
         {voteActions.map((action) => (
           <article class="vote-card" data-action={action}>
@@ -126,43 +127,46 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
           </article>
         ))}
       </div>
-      <p id="vote-status" class="fine-print">Loading vote totals…</p>
+      <p id="vote-status" class="fine-print">Oylar yukleniyor…</p>
+      <p id="prophecy-event" class="fine-print" hidden>
+        Etkinlik tetiklendi: Lakin, Tenok ve Faruk oy verdi. Buyuk yaratik gelip herkesi kurtaracak kehaneti aktif.
+      </p>
     </section>
 
     <section class="card card--wide">
-      <h2>Imperial Dispatches</h2>
-      <p class="section-intro">Recent whispers carried by ornithopter and courier.</p>
+      <h2>House Minor Brifingi</h2>
       <ul class="timeline">
-        <li><time datetime="10191-04-17">Cycle 10191.04.17</time><p>Fremen scouts confirmed pre-spice mass near the Cielago ridge. House Xolotal claims extraction rights at dawn.</p></li>
-        <li><time datetime="10191-04-12">Cycle 10191.04.12</time><p>An imperial observer vessel entered low orbit, forcing every minor house to issue public pledges of loyalty.</p></li>
-        <li><time datetime="10191-04-05">Cycle 10191.04.05</time><p>A clandestine CHOAM envoy offered shipping priority in exchange for senate leverage against House Moritani.</p></li>
+        <li><time datetime="10201-01-03">10201.01.03</time><p>Major tehdit: hayvan genetigi degistirip satmaca agi Trisk genelinde karaborsa yaratti.</p></li>
+        <li><time datetime="10201-01-05">10201.01.05</time><p>Minor tehdit: din satiliyor, titanlarin evrenin sonu olacagina inanc pazarlaniyor.</p></li>
+        <li><time datetime="10201-01-07">10201.01.07</time><p>3 tehdit noktasi icin senato acil oylamaya gitti; monarsi ile gerilim artti.</p></li>
       </ul>
     </section>
 
     <section class="card">
-      <h2>House Assets</h2>
+      <h2>Trisk Yerlesimleri</h2>
       <ul class="stat-list">
-        <li><span>Solaris Reserve</span><strong>4,200,000</strong></li>
-        <li><span>Spice Stockpile</span><strong>1,380 kg</strong></li>
-        <li><span>Shield Corps</span><strong>620 retainers</strong></li>
-        <li><span>Influence in Landsraad</span><strong>Rising</strong></li>
+        <li><span>Milyonluk Sehir I</span><strong>Ankara Nova</strong></li>
+        <li><span>Milyonluk Sehir II</span><strong>Istanbur Prime</strong></li>
+        <li><span>Milyonluk Sehir III</span><strong>Izmir Delta</strong></li>
+        <li><span>Ada Yerlesimi</span><strong>Serit Ada</strong></li>
       </ul>
     </section>
 
     <section class="card">
-      <h2>Great Houses Standing</h2>
+      <h2>Guc Dengesi ve Kisiler</h2>
       <ol class="standings">
-        <li><span>House Corrino</span><strong>92</strong></li>
-        <li><span>House Atreides</span><strong>89</strong></li>
-        <li><span>House Harkonnen</span><strong>86</strong></li>
-        <li><span>House Xolotal</span><strong>74</strong></li>
+        <li><span>Kralice 4. Serena</span><strong>Dogu yurtlarinin fatihi</strong></li>
+        <li><span>Patron Jinping</span><strong>Cip adami cinli</strong></li>
+        <li><span>Yusa "Lakin"</span><strong>Suk dropoutu</strong></li>
+        <li><span>Eray "Tenok"</span><strong>Dinci</strong></li>
+        <li><span>Yusuf "Faruk Naib"</span><strong>Fremen gorusu</strong></li>
       </ol>
-      <p class="fine-print">Scores represent political favor and vote-weight this cycle.</p>
+      <p class="fine-print">Rivaller: Loathing ve Servitude. Resmi kiyafet: Hun pazarlama AS renkleri.</p>
     </section>
   </main>
 
 
-  <script define:vars={{ sayings, voteActions, firebaseBaseUrl }}>
+  <script define:vars={{ sayings, voteActions, firebaseBaseUrl, allowedPlayers }}>
     const today = new Date();
     const daySeed =
       today.getUTCFullYear() * 1000 +
@@ -173,9 +177,17 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
     if (quoteNode) quoteNode.textContent = `“${quote}”`;
 
     const statusNode = document.getElementById('vote-status');
+    const eventNode = document.getElementById('prophecy-event');
     const firebaseVotesEndpoint = `${firebaseBaseUrl}/votes.json`;
     const inputNode = document.getElementById('player-name');
     const cards = [...document.querySelectorAll('.vote-card')];
+
+    const normalize = (name) => name.trim().toLowerCase();
+
+    const canonicalPlayer = (name) => {
+      const normalized = normalize(name);
+      return allowedPlayers.find((candidate) => normalize(candidate) === normalized) || null;
+    };
 
     const setStatus = (message) => {
       if (statusNode) statusNode.textContent = message;
@@ -203,12 +215,19 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
       });
     };
 
+    const updateEventState = (votes) => {
+      const voters = new Set(votes.map((vote) => canonicalPlayer(vote.player)).filter(Boolean));
+      const triggered = allowedPlayers.every((player) => voters.has(player));
+      if (eventNode) eventNode.hidden = !triggered;
+      return triggered;
+    };
+
     const loadVotes = async () => {
       const response = await fetch(firebaseVotesEndpoint);
       const payload = await response.json();
       if (!response.ok) throw new Error('Failed to load votes');
       if (!payload || typeof payload !== 'object') return [];
-      return Object.values(payload);
+      return Object.values(payload).filter((vote) => canonicalPlayer(vote.player));
     };
 
     const saveVote = async (entry) => {
@@ -228,7 +247,8 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
     const loadTotals = async () => {
       const votes = await loadVotes();
       renderTotals(summarize(votes));
-      setStatus('Vote totals synced.');
+      const triggered = updateEventState(votes);
+      setStatus(triggered ? 'Uc oyuncu da oy verdi, etkinlik acildi.' : 'Oy toplamları senkronize edildi.');
     };
 
     cards.forEach((card) => {
@@ -236,17 +256,23 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
         const button = event.target.closest('button[data-choice]');
         if (!button) return;
 
-        const player = inputNode?.value?.trim() || '';
-        if (!player) {
-          setStatus('Set a player name before voting.');
+        const playerInput = inputNode?.value?.trim() || '';
+        if (!playerInput) {
+          setStatus('Oy vermeden once oyuncu adi girin.');
           inputNode?.focus();
+          return;
+        }
+
+        const player = canonicalPlayer(playerInput);
+        if (!player) {
+          setStatus('Sadece Lakin, Tenok ve Faruk oy verebilir.');
           return;
         }
 
         const actionId = card.dataset.action;
         if (!actionId) return;
 
-        setStatus(`Submitting ${button.dataset.choice} vote on ${actionId}…`);
+        setStatus(`${player} icin oy gonderiliyor…`);
 
         try {
           await saveVote({
@@ -256,17 +282,17 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
             updatedAt: new Date().toISOString()
           });
           await loadTotals();
-          localStorage.setItem('arrakis-player-name', player);
-          setStatus(`${player} voted ${button.dataset.choice} on ${actionId}.`);
+          localStorage.setItem('trisk-player-name', player);
+          setStatus(`${player}, ${actionId} icin ${button.dataset.choice} oyu verdi.`);
         } catch {
-          setStatus('Vote submission failed.');
+          setStatus('Oy gonderimi basarisiz.');
         }
       });
     });
 
-    const savedPlayer = localStorage.getItem('arrakis-player-name');
+    const savedPlayer = localStorage.getItem('trisk-player-name');
     if (savedPlayer && inputNode && !inputNode.value) inputNode.value = savedPlayer;
 
-    loadTotals().catch(() => setStatus('Vote backend unreachable. Check Firebase availability and CORS settings.'));
+    loadTotals().catch(() => setStatus('Oy sunucusuna ulasilamadi. Firebase/CORS kontrol edin.'));
   </script>
 </BaseLayout>
