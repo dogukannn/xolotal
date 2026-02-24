@@ -161,7 +161,7 @@ const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatab
     <p class="quote-meta">A quote shifts with the imperial cycle each UTC day.</p>
   </aside>
 
-  <script define:vars={{ sayings }}>
+  <script define:vars={{ sayings, voteActions, firebaseBaseUrl }}>
     const today = new Date();
     const daySeed =
       today.getUTCFullYear() * 1000 +
