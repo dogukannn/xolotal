@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const sayings = [
+  'Fear is the mind-killer. Fear is the little-death that brings total obliteration.',
+  'A beginning is a very delicate time.',
+  'He who can destroy a thing controls a thing.',
+  'The mystery of life is not a problem to solve, but a reality to experience.',
+  'Without change, something sleeps inside us, and seldom awakens.',
+  'Arrakis teaches the attitude of the knife—chopping off what is incomplete and saying: Now it is complete.'
+];
+---
+
+<BaseLayout title="Chronicles of House Sereth | Dune Ledger">
+  <header class="hero">
+    <div class="hero__veil"></div>
+    <div class="hero__content">
+      <p class="eyebrow">Arrakis Campaign Ledger</p>
+      <div class="hero__title-row">
+        <h1>Chronicles of House Sereth</h1>
+        <div class="sigil" role="img" aria-label="House Sereth sigil">
+          <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60 6L108 28V70C108 100 89 122 60 134C31 122 12 100 12 70V28L60 6Z" />
+            <path d="M60 25L83 35V69C83 83 74 96 60 104C46 96 37 83 37 69V35L60 25Z" class="inner"/>
+            <path d="M60 39C70 47 72 61 64 71C59 77 58 84 60 93C49 84 43 74 44 62C45 51 51 44 60 39Z" class="worm"/>
+          </svg>
+        </div>
+      </div>
+      <p>
+        From the sands of Arrakis to the halls of the Landsraad, monitor treaties, spice, and intrigue while
+        House Sereth rises beneath the desert moon.
+      </p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card card--wide">
+      <h2>Imperial Dispatches</h2>
+      <p class="section-intro">Recent whispers carried by ornithopter and courier.</p>
+      <ul class="timeline">
+        <li><time datetime="10191-04-17">Cycle 10191.04.17</time><p>Fremen scouts confirmed pre-spice mass near the Cielago ridge. House Sereth claims extraction rights at dawn.</p></li>
+        <li><time datetime="10191-04-12">Cycle 10191.04.12</time><p>An imperial observer vessel entered low orbit, forcing every minor house to issue public pledges of loyalty.</p></li>
+        <li><time datetime="10191-04-05">Cycle 10191.04.05</time><p>A clandestine CHOAM envoy offered shipping priority in exchange for senate leverage against House Moritani.</p></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>House Assets</h2>
+      <ul class="stat-list">
+        <li><span>Solaris Reserve</span><strong>4,200,000</strong></li>
+        <li><span>Spice Stockpile</span><strong>1,380 kg</strong></li>
+        <li><span>Shield Corps</span><strong>620 retainers</strong></li>
+        <li><span>Influence in Landsraad</span><strong>Rising</strong></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Great Houses Standing</h2>
+      <ol class="standings">
+        <li><span>House Corrino</span><strong>92</strong></li>
+        <li><span>House Atreides</span><strong>89</strong></li>
+        <li><span>House Harkonnen</span><strong>86</strong></li>
+        <li><span>House Sereth</span><strong>74</strong></li>
+      </ol>
+      <p class="fine-print">Scores represent political favor and vote-weight this cycle.</p>
+    </section>
+
+    <section class="card card--wide">
+      <h2>Landsraad Votes</h2>
+      <table>
+        <thead><tr><th>Proposal</th><th>Status</th><th>House Vote</th><th>Deadline</th></tr></thead>
+        <tbody>
+          <tr><td>Spice tariff relief for Arrakeen districts</td><td><span class="pill">Open</span></td><td>Undecided</td><td>Cycle 10191.04.22</td></tr>
+          <tr><td>Sardaukar transit corridor extension</td><td><span class="pill pill--alert">Critical</span></td><td>Oppose</td><td>Cycle 10191.04.19</td></tr>
+          <tr><td>Guild deep-desert survey charter</td><td><span class="pill">Open</span></td><td>Support</td><td>Cycle 10191.04.25</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <aside class="daily-saying">
+    <h2>Litany of the Day</h2>
+    <blockquote id="daily-quote"></blockquote>
+    <p class="quote-meta">A quote shifts with the imperial cycle each UTC day.</p>
+  </aside>
+
+  <script define:vars={{ sayings }}>
+    const today = new Date();
+    const daySeed =
+      today.getUTCFullYear() * 1000 +
+      Math.floor((today - new Date(Date.UTC(today.getUTCFullYear(), 0, 0))) / 86400000);
+
+    const quote = sayings[daySeed % sayings.length];
+    const quoteNode = document.getElementById('daily-quote');
+    if (quoteNode) quoteNode.textContent = `“${quote}”`;
+  </script>
+</BaseLayout>
