@@ -9,6 +9,23 @@ const sayings = [
   'Without change, something sleeps inside us, and seldom awakens.',
   'Arrakis teaches the attitude of the knife—chopping off what is incomplete and saying: Now it is complete.'
 ];
+
+const parties = [
+  { name: 'House Sereth Bloc', seats: 31, color: '#d8b26a' },
+  { name: 'Imperial Loyalists', seats: 27, color: '#77c9ff' },
+  { name: 'CHOAM Compact', seats: 24, color: '#79df9c' },
+  { name: 'Frontier Coalition', seats: 18, color: '#f28ea7' }
+];
+
+const senateSeats = parties.flatMap((party) =>
+  Array.from({ length: party.seats }, (_, idx) => ({
+    id: `${party.name}-${idx + 1}`,
+    party: party.name,
+    color: party.color
+  }))
+);
+
+const voteActions = ['Spice Reserve Release', 'Border Skirmish Response', 'Guild Passage Tax'];
 ---
 
 <BaseLayout title="Chronicles of House Sereth | Dune Ledger">
@@ -34,6 +51,48 @@ const sayings = [
   </header>
 
   <main class="layout">
+    <section class="card card--wide senate-section">
+      <h2>Landsraad Senate (100 Seats)</h2>
+      <p class="section-intro">Each seat belongs to one of four active factions. Dots are placed in a semi-circular chamber.</p>
+      <div class="senate-arc" role="img" aria-label="Semicircle senate seating with 100 members">
+        {
+          senateSeats.map((seat, idx) => (
+            <span class="senate-seat" style={`--index:${idx}; --seat-color:${seat.color};`} title={`${seat.party} seat ${idx + 1}`}></span>
+          ))
+        }
+      </div>
+      <ul class="party-legend">
+        {parties.map((party) => (
+          <li>
+            <span class="party-dot" style={`--party-color:${party.color};`}></span>
+            <span>{party.name}</span>
+            <strong>{party.seats} seats</strong>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="card card--wide vote-section">
+      <h2>Player Vote Console</h2>
+      <p class="section-intro">Players can vote from any computer connected to this server. One vote per player name, per action.</p>
+      <label class="vote-label" for="player-name">Player name</label>
+      <input id="player-name" class="vote-input" type="text" maxlength="32" placeholder="e.g. Lady Veyra" />
+      <div class="vote-grid">
+        {voteActions.map((action) => (
+          <article class="vote-card" data-action={action}>
+            <h3>{action}</h3>
+            <p class="vote-tally" data-tally={action}>Support 0 · Oppose 0 · Abstain 0</p>
+            <div class="vote-actions">
+              <button type="button" data-choice="support">Support</button>
+              <button type="button" data-choice="oppose">Oppose</button>
+              <button type="button" data-choice="abstain">Abstain</button>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p id="vote-status" class="fine-print">Loading vote totals…</p>
+    </section>
+
     <section class="card card--wide">
       <h2>Imperial Dispatches</h2>
       <p class="section-intro">Recent whispers carried by ornithopter and courier.</p>
@@ -64,18 +123,6 @@ const sayings = [
       </ol>
       <p class="fine-print">Scores represent political favor and vote-weight this cycle.</p>
     </section>
-
-    <section class="card card--wide">
-      <h2>Landsraad Votes</h2>
-      <table>
-        <thead><tr><th>Proposal</th><th>Status</th><th>House Vote</th><th>Deadline</th></tr></thead>
-        <tbody>
-          <tr><td>Spice tariff relief for Arrakeen districts</td><td><span class="pill">Open</span></td><td>Undecided</td><td>Cycle 10191.04.22</td></tr>
-          <tr><td>Sardaukar transit corridor extension</td><td><span class="pill pill--alert">Critical</span></td><td>Oppose</td><td>Cycle 10191.04.19</td></tr>
-          <tr><td>Guild deep-desert survey charter</td><td><span class="pill">Open</span></td><td>Support</td><td>Cycle 10191.04.25</td></tr>
-        </tbody>
-      </table>
-    </section>
   </main>
 
   <aside class="daily-saying">
@@ -93,5 +140,70 @@ const sayings = [
     const quote = sayings[daySeed % sayings.length];
     const quoteNode = document.getElementById('daily-quote');
     if (quoteNode) quoteNode.textContent = `“${quote}”`;
+
+    const statusNode = document.getElementById('vote-status');
+    const inputNode = document.getElementById('player-name');
+    const cards = [...document.querySelectorAll('.vote-card')];
+
+    const setStatus = (message) => {
+      if (statusNode) statusNode.textContent = message;
+    };
+
+    const renderTotals = (totals) => {
+      totals.forEach((item) => {
+        const tallyNode = document.querySelector(`[data-tally="${item.actionId}"]`);
+        if (!tallyNode) return;
+        const { support, oppose, abstain } = item.tally;
+        tallyNode.textContent = `Support ${support} · Oppose ${oppose} · Abstain ${abstain}`;
+      });
+    };
+
+    const loadTotals = async () => {
+      const response = await fetch('/api/votes.json');
+      const payload = await response.json();
+      renderTotals(payload.totals || []);
+      setStatus('Vote totals synced.');
+    };
+
+    cards.forEach((card) => {
+      card.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-choice]');
+        if (!button) return;
+
+        const player = inputNode?.value?.trim() || '';
+        if (!player) {
+          setStatus('Set a player name before voting.');
+          inputNode?.focus();
+          return;
+        }
+
+        const actionId = card.dataset.action;
+        if (!actionId) return;
+
+        setStatus(`Submitting ${button.dataset.choice} vote on ${actionId}…`);
+
+        const response = await fetch('/api/votes.json', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ actionId, player, choice: button.dataset.choice })
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          setStatus(err.error || 'Vote submission failed.');
+          return;
+        }
+
+        const payload = await response.json();
+        renderTotals(payload.totals || []);
+        localStorage.setItem('arrakis-player-name', player);
+        setStatus(`${player} voted ${button.dataset.choice} on ${actionId}.`);
+      });
+    });
+
+    const savedPlayer = localStorage.getItem('arrakis-player-name');
+    if (savedPlayer && inputNode && !inputNode.value) inputNode.value = savedPlayer;
+
+    loadTotals().catch(() => setStatus('Vote server offline. Start Astro in server mode to collect live votes.'));
   </script>
 </BaseLayout>
