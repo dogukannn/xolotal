@@ -54,6 +54,58 @@ h1,h2,h3 { font-family: 'Cinzel', serif; letter-spacing: .04em; margin: 0 0 .55r
 .stat-list,.standings { list-style: none; padding: 0; }
 .stat-list li,.standings li { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: .4rem 0; }
 
+.senate-section { overflow: hidden; }
+.senate-arc {
+  --size: 21rem;
+  position: relative;
+  width: var(--size);
+  height: calc(var(--size) / 2 + .5rem);
+  margin: 1rem auto;
+}
+.senate-seat {
+  --total: 100;
+  --angle: calc(-180deg + ((180deg / (var(--total) - 1)) * var(--index)));
+  --radius: 9rem;
+  position: absolute;
+  bottom: .3rem;
+  left: 50%;
+  width: .62rem;
+  height: .62rem;
+  border-radius: 999px;
+  background: var(--seat-color);
+  border: 1px solid rgba(255,255,255,.24);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--seat-color) 50%, transparent);
+  transform: rotate(var(--angle)) translateY(calc(var(--radius) * -1));
+  transform-origin: center calc(var(--radius) + .31rem);
+}
+.party-legend { display: grid; gap: .45rem; list-style: none; margin: 1rem 0 0; padding: 0; }
+.party-legend li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .55rem; }
+.party-dot { width: .66rem; height: .66rem; border-radius: 999px; background: var(--party-color); }
+
+.vote-label { display: block; color: var(--muted); margin-bottom: .3rem; }
+.vote-input {
+  width: min(22rem, 100%);
+  border-radius: .5rem;
+  border: 1px solid var(--line);
+  padding: .52rem .62rem;
+  background: rgba(8, 9, 13, .5);
+  color: var(--ink);
+  margin-bottom: .85rem;
+}
+.vote-grid { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fit,minmax(14rem,1fr)); }
+.vote-card { border: 1px solid var(--line); border-radius: .7rem; padding: .8rem; background: rgba(8,9,13,.38); }
+.vote-tally { color: var(--muted); font-size: .9rem; margin-bottom: .55rem; }
+.vote-actions { display: flex; gap: .45rem; flex-wrap: wrap; }
+.vote-actions button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .35rem .7rem;
+  color: var(--ink);
+  background: rgba(216,178,106,.14);
+  cursor: pointer;
+}
+.vote-actions button:hover { background: rgba(216,178,106,.24); }
+
 table { width: 100%; border-collapse: collapse; }
 th,td { border-bottom: 1px solid var(--line); padding: .55rem; text-align: left; }
 .pill { display: inline-block; border-radius: 999px; padding: .1rem .55rem; font-size: .8rem; color: var(--accent); background: rgba(216,178,106,.18); }
