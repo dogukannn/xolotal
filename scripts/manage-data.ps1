@@ -41,14 +41,10 @@ function Load-JsonArray {
   if (!(Test-Path $Path)) { throw "JSON file not found at $Path" }
 
   $content = Get-Content $Path -Raw
-  if ([string]::IsNullOrWhiteSpace($content)) { return @() }
+  if ([string]::IsNullOrWhiteSpace($content)) { return ,@() }
 
   $parsed = ConvertFrom-Json $content
-  if ($parsed -is [System.Collections.IEnumerable] -and $parsed -isnot [string]) {
-    return @($parsed)
-  }
-
-  return @($parsed)
+  return ,@($parsed)
 }
 
 function Save-Json {
