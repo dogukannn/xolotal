@@ -1,37 +1,23 @@
-# Dune Imperium Campaign Site
+# Dune Campaign Chronicle (Astro)
 
-Static website template for tracking your Imperium TTRPG campaign, ready for GitHub Pages deployment.
+A Dune-inspired campaign tracker now built with **Astro** and styled with a richer Arrakis theme, including a custom house sigil.
 
-## Included sections
+## Why the previous server showed "Bad Request"
 
-- Imperium events timeline
-- House assets
-- Senate/Landsraad standings
-- Important figures
-- Published votings
-- Daily rotating religious saying/litany
+This project is now an Astro app (not just plain static files), so use Astro's development server rather than a random static server command.
 
-## Local preview
+## Run locally
 
 ```bash
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Open `http://localhost:8000` in your browser.
+Then open `http://localhost:4321`.
 
-## Deploy on GitHub Pages
+## Build for production
 
-1. Push this repository to GitHub.
-2. Go to **Settings → Pages**.
-3. Under **Build and deployment**, set:
-   - **Source:** `Deploy from a branch`
-   - **Branch:** `main` (or your preferred branch), `/root`
-4. Save and wait for GitHub to publish.
-
-Your site will be hosted at:
-
-`https://<your-username>.github.io/<repository-name>/`
-
-## Updating campaign data
-
-Edit `index.html` for events, assets, standings, figures, and votes. The daily litany is controlled in `script.js` via the `sayings` array.
+```bash
+npm run build
+npm run preview
+```
