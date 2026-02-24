@@ -1,15 +1,17 @@
 [
   {
-    "id": "session-001",
-    "title": "Ilk Trisk Seansi",
-    "date": "10201-01-09",
+    "id": "session-002",
+    "title": "Firt ses",
+    "date": "2026-02-25",
     "threatPoints": 3,
-    "momentum": 2,
+    "momentum": 4,
     "determinationPoints": 1,
     "spotlights": [
-      "Senato acil oylamasi ile House Minor yetkisi uzatildi.",
-      "Anerkil ajanlari kara pazar sevkiyatinda yakalandi."
+      "Prenses Irya'nin pesine dusuldu.",
+      "Spy ozgur sehirlerde kayboldu.",
+      "Jingping ile tanisildi, selen hanima hayran kalindi.",
+      "Liman arastirmalari sirasinda cipli bir kurta rastlandi."
     ],
-    "notes": "Faruk, kehanet oylamasinda dengeyi bozan kilit oy verdi."
+    "notes": ""
   }
 ]
