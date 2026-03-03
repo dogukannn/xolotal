@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import sessions from '../data/sessions.json';
 import sayings from '../data/sayings.json';
 import parties from '../data/senate-parties.json';
-import voteActions from '../data/vote-actions.json';
+import voteScenarios from '../data/vote-scenarios.json';
 import briefings from '../data/house-minor-briefings.json';
 import settlements from '../data/settlements.json';
 import planets from '../data/planets.json';
@@ -45,6 +45,7 @@ const senateSeats = senateRows.flatMap((rowSeats, rowIndex) => {
 });
 
 const allowedPlayers = ['Lakin', 'Tenok', 'Faruk'];
+const voteActionIds = voteScenarios.map((scenario) => scenario.title);
 const firebaseBaseUrl = 'https://xolotal-default-rtdb.europe-west1.firebasedatabase.app';
 const orderedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 const imageBaseUrl = 'https://dogukannn.github.io/xolotal';
@@ -122,14 +123,36 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
       <label class="vote-label" for="player-name">Oyuncu adi</label>
       <input id="player-name" class="vote-input" type="text" maxlength="32" placeholder="Lakin / Tenok / Faruk" />
       <div class="vote-grid">
-        {voteActions.map((action) => (
-          <article class="vote-card" data-action={action}>
-            <h3>{action}</h3>
-            <p class="vote-tally" data-tally={action}>Support 0 · Oppose 0 · Abstain 0</p>
+        {voteScenarios.map((scenario) => (
+          <article class="vote-card" data-action={scenario.title}>
+            <h3>{scenario.title}</h3>
+            <p class="vote-tally" data-tally={scenario.title}>Support 0 · Oppose 0 · Abstain 0</p>
+            <div class="vote-briefing-grid">
+              <div>
+                <p class="vote-label">Genel artilar</p>
+                <p class="fine-print">{scenario.briefing.upsides}</p>
+              </div>
+              <div>
+                <p class="vote-label">Genel eksiler</p>
+                <p class="fine-print">{scenario.briefing.downsides}</p>
+              </div>
+            </div>
+            <p class="vote-label">Daha fazla bilgi</p>
+            <p class="fine-print">{scenario.briefing.moreInfo}</p>
+            <p class="vote-label">Parlamentodaki fraksiyon dusunceleri</p>
+            <ul class="faction-thinking-list">
+              {scenario.factionThinking.map((entry) => (
+                <li>
+                  <strong>{entry.faction}</strong>
+                  <span class="pill">{entry.stance}</span>
+                  <p class="fine-print">{entry.thinking}</p>
+                </li>
+              ))}
+            </ul>
             <div class="vote-actions">
-              <button type="button" data-choice="support">Support</button>
-              <button type="button" data-choice="oppose">Oppose</button>
-              <button type="button" data-choice="abstain">Abstain</button>
+              {scenario.choices.map((choice) => (
+                <button type="button" data-choice={choice.id}>{choice.label}</button>
+              ))}
             </div>
           </article>
         ))}
@@ -138,6 +161,18 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
       <p id="prophecy-event" class="fine-print" hidden>
         Etkinlik tetiklendi: Lakin, Tenok ve Faruk oy verdi. Buyuk yaratik gelip herkesi kurtaracak kehaneti aktif.
       </p>
+    </section>
+
+    <section id="vote-result-section" class="card card--wide" hidden>
+      <h2>Parlamento Oylama Sonucu</h2>
+      <p class="section-intro">Tum oyuncular oy verdiginde sonuc JSON kaynagindan otomatik gosterilir.</p>
+      <p id="vote-result-tally" class="fine-print"></p>
+      <article id="vote-result-card" class="result-card" hidden>
+        <h3 id="vote-result-title"></h3>
+        <p id="vote-result-summary"></p>
+        <p class="fine-print" id="vote-result-consequences"></p>
+        <img id="vote-result-image" alt="Oylama sonucu gorseli" loading="lazy" hidden />
+      </article>
     </section>
 
     <section class="card card--wide">
@@ -239,7 +274,7 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
   </main>
 
 
-  <script define:vars={{ sayings, voteActions, firebaseBaseUrl, allowedPlayers }}>
+  <script define:vars={{ sayings, voteScenarios, voteActionIds, firebaseBaseUrl, allowedPlayers }}>
     const today = new Date();
     const daySeed =
       today.getUTCFullYear() * 1000 +
@@ -254,9 +289,15 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
     const firebaseVotesEndpoint = `${firebaseBaseUrl}/votes.json`;
     const inputNode = document.getElementById('player-name');
     const cards = [...document.querySelectorAll('.vote-card')];
+    const resultSection = document.getElementById('vote-result-section');
+    const resultTallyNode = document.getElementById('vote-result-tally');
+    const resultCardNode = document.getElementById('vote-result-card');
+    const resultTitleNode = document.getElementById('vote-result-title');
+    const resultSummaryNode = document.getElementById('vote-result-summary');
+    const resultConsequencesNode = document.getElementById('vote-result-consequences');
+    const resultImageNode = document.getElementById('vote-result-image');
 
     const normalize = (name) => name.trim().toLowerCase();
-
     const canonicalPlayer = (name) => {
       const normalized = normalize(name);
       return allowedPlayers.find((candidate) => normalize(candidate) === normalized) || null;
@@ -267,15 +308,19 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
     };
 
     const summarize = (votes) => {
-      return voteActions.map((actionId) => {
+      return voteActionIds.map((actionId) => {
         const tally = { support: 0, oppose: 0, abstain: 0 };
+        const voters = new Set();
+
         votes
           .filter((vote) => vote.actionId === actionId)
           .forEach((vote) => {
             if (vote.choice in tally) tally[vote.choice] += 1;
+            const player = canonicalPlayer(vote.player || '');
+            if (player) voters.add(player);
           });
 
-        return { actionId, tally };
+        return { actionId, tally, voters: [...voters] };
       });
     };
 
@@ -289,7 +334,7 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
     };
 
     const updateEventState = (votes) => {
-      const voters = new Set(votes.map((vote) => canonicalPlayer(vote.player)).filter(Boolean));
+      const voters = new Set(votes.map((vote) => canonicalPlayer(vote.player || '')).filter(Boolean));
       const triggered = allowedPlayers.every((player) => voters.has(player));
       if (eventNode) eventNode.hidden = !triggered;
       return triggered;
@@ -300,7 +345,7 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
       const payload = await response.json();
       if (!response.ok) throw new Error('Failed to load votes');
       if (!payload || typeof payload !== 'object') return [];
-      return Object.values(payload).filter((vote) => canonicalPlayer(vote.player));
+      return Object.values(payload).filter((vote) => vote && vote.actionId && vote.choice);
     };
 
     const saveVote = async (entry) => {
@@ -317,10 +362,45 @@ const resolveImageUrl = (url) => (url?.startsWith('/images/') ? `${imageBaseUrl}
       if (!response.ok) throw new Error('Could not save vote.');
     };
 
+    const renderResultState = (totals) => {
+      if (!resultSection || !resultTallyNode || !resultCardNode) return;
+
+      const eligible = totals.find((item) => item.voters.length === allowedPlayers.length);
+      resultSection.hidden = !eligible;
+
+      if (!eligible) {
+        resultCardNode.hidden = true;
+        return;
+      }
+
+      const scenario = voteScenarios.find((item) => item.title === eligible.actionId);
+      if (!scenario) {
+        resultCardNode.hidden = true;
+        return;
+      }
+
+      const { support, oppose, abstain } = eligible.tally;
+      resultTallyNode.textContent = `Toplam oy: ${support + oppose + abstain} · Support ${support} · Oppose ${oppose} · Abstain ${abstain}`;
+
+      const outcome = support > oppose ? scenario.result.success : scenario.result.fail;
+      if (resultTitleNode) resultTitleNode.textContent = outcome.title;
+      if (resultSummaryNode) resultSummaryNode.textContent = outcome.summary;
+      if (resultConsequencesNode) resultConsequencesNode.textContent = `Sonuclar: ${outcome.consequences}`;
+
+      if (resultImageNode) {
+        resultImageNode.src = outcome.imageUrl;
+        resultImageNode.hidden = !outcome.imageUrl;
+      }
+
+      resultCardNode.hidden = false;
+    };
+
     const loadTotals = async () => {
       const votes = await loadVotes();
-      renderTotals(summarize(votes));
+      const totals = summarize(votes);
+      renderTotals(totals);
       const triggered = updateEventState(votes);
+      renderResultState(totals);
       setStatus(triggered ? 'Uc oyuncu da oy verdi, etkinlik acildi.' : 'Oy toplamları senkronize edildi.');
     };
 

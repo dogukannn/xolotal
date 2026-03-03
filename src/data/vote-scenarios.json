@@ -1,0 +1,47 @@
+[
+  {
+    "id": "rain-tax-relief",
+    "title": "Çiftciler artan yağışlardan dolayı vergi indirimi talep ediyor.",
+    "briefing": {
+      "upsides": "Kırsal üretimde iflas riski azalır, gıda arzı ve yerel istikrar korunur.",
+      "downsides": "Kısa vadede hazine geliri düşer ve şehir altyapı yatırımları yavaşlayabilir.",
+      "moreInfo": "Yağış artışı nedeniyle iki bölgede hasat kaybı raporlandı; 2 oturumluk geçici indirim öneriliyor."
+    },
+    "factionThinking": [
+      {
+        "faction": "Demirler",
+        "stance": "Temkinli destek",
+        "thinking": "Vergi indiriminin süresi net sınırlarla belirlenirse destekleyebilirler."
+      },
+      {
+        "faction": "Nehir Ticaret Birliği",
+        "stance": "Karşı",
+        "thinking": "Lojistik ve liman bütçelerinde açık oluşmasından endişe ediyorlar."
+      },
+      {
+        "faction": "Yeşil Meclis",
+        "stance": "Güçlü destek",
+        "thinking": "Çiftçilerin korunmasının sosyal huzur ve biyolojik sürdürülebilirlik için kritik olduğunu savunuyorlar."
+      }
+    ],
+    "choices": [
+      { "id": "support", "label": "Support" },
+      { "id": "oppose", "label": "Oppose" },
+      { "id": "abstain", "label": "Abstain" }
+    ],
+    "result": {
+      "success": {
+        "title": "Önerge kabul edildi",
+        "summary": "Geçici vergi indirimi 2 oturum boyunca uygulanacak.",
+        "consequences": "Çiftçi mahallelerinde huzursuzluk azalır, ancak merkez bütçesinde kemer sıkma gerekir.",
+        "imageUrl": "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?auto=format&fit=crop&w=1200&q=80"
+      },
+      "fail": {
+        "title": "Önerge reddedildi",
+        "summary": "Vergi indirimi teklifi meclisten geçmedi.",
+        "consequences": "Kırsalda protestolar ve üretim düşüşü riski artar, güvenlik önlemleri tartışmaya açılır.",
+        "imageUrl": "https://images.unsplash.com/photo-1614851099511-773084f6911d?auto=format&fit=crop&w=1200&q=80"
+      }
+    }
+  }
+]
