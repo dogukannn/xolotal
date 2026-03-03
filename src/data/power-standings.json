@@ -1,11 +1,12 @@
 {
   "standings": [
-    { "name": "Kralice 4. Serena", "title": "Dogu yurtlarinin fatihi" },
-    { "name": "Patron Jinping", "title": "Cip adami cinli" },
-    { "name": "Yusa \"Lakin\"", "title": "Suk dropoutu" },
-    { "name": "Eray \"Tenok\"", "title": "Dinci" },
-    { "name": "Yusuf \"Faruk Naib\"", "title": "Fremen gorusu" }
+    { "name": "Yusa \"Lakin\"", "title": "Başhekim" },
+    { "name": "Eray \"Tenok\"", "title": "Ayetullah Supreme" },
+    { "name": "Yusuf \"Faruk Naib\"", "title": "Fremen, Yırtıcıların Efendisi" },
+    { "name": "Kralice 4. Serena", "title": "Doğu Yurtlarının Fatihi, Xolotol Kraliçesi" },
+    { "name": "Prenses İray", "title": "Xolotol'un kayıp presnesi." },
+    { "name": "Patron Jinping", "title": "Zentralli bir fabrikatör." }
   ],
-  "rivals": "Loathing ve Servitude",
-  "uniform": "Hun pazarlama AS renkleri"
+  "rivals": "Kentarin Hanedanlığı",
+  "uniform": "Yesil Siyah Cüppeler"
 }

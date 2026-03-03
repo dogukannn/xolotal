@@ -1,16 +1,16 @@
 [
   {
     "name": "Patron Jinping",
-    "title": "Cip Konsorsiyumu Lideri",
+    "title": "Çip Konsorsiyumu Lideri",
     "portraitUrl": "/images/notable-characters/jingping.png",
     "portraitAlt": "Patron Jinping portresi",
-    "notes": "Liman ticaretinde ciplere dayali takip agini yonetiyor.",
+    "notes": "Ev tipi çip fabrikatörü.",
     "width": 480,
     "height": 480
   }, 
   {
     "name": "Selen Hanım",
-    "title": "Jingping'in Danismani",
+    "title": "Jingping'in Danışmanı",
     "portraitUrl": "/images/notable-characters/selen.png",
     "portraitAlt": "Selen Hanım portresi",
     "notes": "Jingping'in liman ticaretindeki stratejik danismani, aklı ve bilgisiyle taniniyor.",
@@ -18,11 +18,11 @@
     "height": 480
   }, 
   {
-    "name": "Bas Casus Hasan",
+    "name": "Casus Kumandanı Hasan",
     "title": "Spymaster Mahmut'un Yardimcisi",
     "portraitUrl": "/images/notable-characters/hasan.png",
     "portraitAlt": "Bas Casus Hasan portresi",
-    "notes": "Spymaster Mahmut'un yardimcisi, hızlı bir şekilde yükselen hasan Xolotan'in casus ağında önemli bir rol oynuyor.",
+    "notes": "Spymaster Mahmut'un yardimcisi, hızlı bir şekilde yükselen hasan Xolotal'in casus ağında önemli bir rol oynuyor.",
     "width": 480,
     "height": 480
   }

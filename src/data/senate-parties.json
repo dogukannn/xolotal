@@ -1,6 +1,6 @@
 [
-  { "name": "Monarsi Yanlilari", "seats": 36, "color": "#d8b26a" },
-  { "name": "Senato Bloku", "seats": 28, "color": "#77c9ff" },
-  { "name": "Isyanci Grup", "seats": 22, "color": "#79df9c" },
-  { "name": "Anerkil Konfederasyon", "seats": 14, "color": "#f28ea7" }
+  { "name": "Demir Yetki", "seats": 32, "color": "#807A7A" },
+  { "name": "Yeşil Mutabakat", "seats": 21, "color": "#1f7a1f" },
+  { "name": "Altın Perde", "seats": 18, "color": "#ffc266" },
+  { "name": "Siyah Çember", "seats": 29, "color": "#1a1a1a" }
 ]
