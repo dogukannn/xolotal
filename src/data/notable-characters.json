@@ -25,5 +25,14 @@
     "notes": "Spymaster Mahmut'un yardimcisi, hızlı bir şekilde yükselen hasan Xolotal'in casus ağında önemli bir rol oynuyor.",
     "width": 480,
     "height": 480
+  },
+  {
+    "name": "Tenok",
+    "title": "Ayetullah Supreme",
+    "portraitUrl": "/images/notable-characters/ayetullah.png",
+    "portraitAlt": "Tenok Portresı",
+    "notes": "Hitabet yeteneği ile bilinen din insanı.",
+    "width": 480,
+    "height": 480
   }
 ]
